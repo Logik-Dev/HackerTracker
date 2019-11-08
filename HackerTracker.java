@@ -3,14 +3,10 @@ import java.util.*;
 
 public class HackerTracker {
 
-    Map<String, List<String>> ipsByUser;
+    Map<String, List<String>> ipsByUser = new HashMap<>();
     BufferedReader reader; 
     BufferedWriter writer;
 
-    public HackerTracker(){
-        this.ipsByUser = new HashMap<>();
-    }
-    
     /**
      * Extraire les noms des utilisateurs et les définir
      * comme clef de la hashmap ipsByUser.
@@ -19,7 +15,6 @@ public class HackerTracker {
     public void getUsersFromFile() throws IOException {
         reader = new BufferedReader(new FileReader("connexion.log"));
         String currentLine = "";
-        
         while((currentLine = reader.readLine()) != null) {
             this.ipsByUser.put(currentLine.split(";")[1], new ArrayList<String>());
         }
@@ -110,17 +105,19 @@ public class HackerTracker {
         BufferedReader reader = new BufferedReader(new FileReader("connexion.log"));
         String currentLine = "";
         String suspectName = "";
+        String suspectIp = "";
         
         while((currentLine = reader.readLine()) != null){
-            String name = currentLine.split(";")[1];
             String hour = currentLine.split(";")[2].split(" ")[1].split(":")[0];
+            
             if(Integer.parseInt(hour) < 8 || Integer.parseInt(hour) > 19){
-                suspectName = name;
+                suspectName = currentLine.split(";")[1];
+                suspectIp = currentLine.split(";")[0];
             }
         }
         
         reader.close();
-        System.out.println("Le suspect se nomme " + suspectName + "\nL'ip qu'il a visité est " + ipsByUser.get(suspectName).get(0));
+        System.out.println( "Le suspect se nomme " + suspectName + "\nL'ip qu'il a visité est " + suspectIp );
     }
     
 
